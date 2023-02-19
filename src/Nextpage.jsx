@@ -3,34 +3,36 @@ import Nav from "./Mainnavbar";
 import Footer from "./Footer";
 import { Link, useNavigate } from "react-router-dom";
 
-const callouts = [
-  {
-    id: "smartphones",
-    name: "Smart Phones",
-    description: "Wide range of phone from multi brands.",
-    imageSrc: "https://www.linkpicture.com/q/iphone_buy_chvehwtfgamq_og.jpg",
-    imageAlt:
-      "Desk with leather desk pad, walnut desk organizer, wireless keyboard and mouse, and porcelain mug.",
-    href: "#",
-  },
-  {
-    id: "laptops",
-    name: "Laptops",
-    description: "Shop with us with wide range of laptop collection.",
-    imageSrc: "https://www.linkpicture.com/q/laptop.jpeg",
-    imageAlt:
-      "Wood table with porcelain mug, leather journal, brass pen, leather key ring, and a houseplant.",
-    href: "#",
-  },
-  {
-    id: "accessories",
-    name: "Accessories",
-    description: "Daily commute essentials, find all kinds of accessories here",
-    imageSrc: "https://www.linkpicture.com/q/sony_1.jpeg",
-    imageAlt: "Collection of four insulated travel bottles on wooden shelf.",
-    href: "#",
-  },
-];
+ export const callouts = [
+   {
+     id: "smartphones",
+     name: "Smart Phones",
+     description: "Wide range of phone from multi brands.",
+     imageSrc: "https://www.linkpicture.com/q/iphone_buy_chvehwtfgamq_og.jpg",
+     imageAlt:
+       "Desk with leather desk pad, walnut desk organizer, wireless keyboard and mouse, and porcelain mug.",
+     href: "#",
+   },
+   {
+     id: "laptops",
+     name: "Laptops",
+     description: "Shop with us with wide range of laptop collection.",
+     imageSrc: "https://www.linkpicture.com/q/laptop.jpeg",
+     imageAlt:
+       "Wood table with porcelain mug, leather journal, brass pen, leather key ring, and a houseplant.",
+     href: "#",
+   },
+   {
+     id: "accessories",
+     name: "Accessories",
+     description:
+       "Daily commute essentials, find all kinds of accessories here",
+     imageSrc: "https://www.linkpicture.com/q/sony_1.jpeg",
+     imageAlt: "Collection of four insulated travel bottles on wooden shelf.",
+     href: "#",
+   }
+ 
+ ];
 
 const Nextpage = () => {
   const Navigate = useNavigate();
@@ -72,7 +74,7 @@ const Nextpage = () => {
                   key={callout.name}
                   className="group relative "
                   onClick={() => {
-                    Navigate("products/{callout.id}");
+                    Navigate(callout.id);
                   }}
                 >
                   <div className="relative h-80 w-full overflow-hidden rounded-lg bg-white group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1 ">
