@@ -14,11 +14,17 @@ const Cartitem = () => {
           <div className="py-12 flex w-full ">
             <div className="space-y-[13px] mr-[39px]">
               <Cartiteminfo />
+              <hr className=" border-black"/>
               <Cartiteminfo />
+              <hr className="border-black"/>
               <Cartiteminfo />
+              <hr className="border-black"/>
               <Cartiteminfo />
+              <hr className="border-black"/>
               <Cartiteminfo />
+              <hr className="border-black"/>
               <Cartiteminfo />
+              <hr className="border-black"/>
             </div>
 
             <div className=" w-auto h-fit  border-black border-4 rounded-lg">

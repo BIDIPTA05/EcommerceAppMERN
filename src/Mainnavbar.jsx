@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { AiOutlineShoppingCart } from "react-icons/ai";
+import { BsFillCartPlusFill } from "react-icons/bs";
+import { BsFillBookmarkHeartFill } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function NavBar() {
@@ -76,18 +77,25 @@ export default function NavBar() {
               <li className="text-white hover:text-blue-600">
                 <a href="javascript:void(0)">Contact Us</a>
               </li>
+              <li>
+                <Link navigate to="/wishlist">
+                  {" "}
+                  <BsFillBookmarkHeartFill className="text-3xl text-pink-500" />{" "}
+                </Link>
+              </li>
               <li className="text-white hover:text-blue-600">
                 <a href="#">
                   <div className="indicator ">
                     <span className="indicator-item badge badge-secondary bg-red-600 border-white  ">
                       9
                     </span>
-                    <button className="btn btn-accent">
-                      CART <AiOutlineShoppingCart />
-                    </button>
+                    <Link navigate to="/cart">
+                      <BsFillCartPlusFill className="text-3xl text-white" />
+                    </Link>
                   </div>
                 </a>
               </li>
+
               <li>
                 <a href="javascript:void(0)">
                   <button

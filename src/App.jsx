@@ -7,6 +7,7 @@ import Nextpage from "./Nextpage";
 import Error from "./Error";
 import Caterogy from "./Caterogy";
 import Cartitem from "./Cartitem";
+import Wishlist from "./Wishlist";
 
 
 
@@ -21,6 +22,8 @@ const App = () => {
           <Route path="/register" element={<Registration />} />
           <Route path="/products" element={<Nextpage />} />
           <Route path="/cart" element={<Cartitem />} />
+          <Route path="/wishlist" element={<Wishlist />} />
+
           {/* <Route path="/products/smartphones" element={<Mobiles />} />
           <Route path="/products/laptops" element={<Laptops />} />
           <Route path="/products/accessories" element={<Accessories />} /> */}
