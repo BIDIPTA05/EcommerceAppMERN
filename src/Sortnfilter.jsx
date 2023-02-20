@@ -10,8 +10,8 @@ const Sortnfilter = () => {
             <h1>Sort By</h1>
           </option>
           <option>Relevance</option>
-          <option>Low to high</option>
-          <option>High to low</option>
+          <option>Low to High</option>
+          <option>High to Low</option>
         </select>{" "}
         <select className="select select-warning w-full max-w-xs">
           <option disabled selected>
