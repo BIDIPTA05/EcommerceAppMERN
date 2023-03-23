@@ -3,16 +3,17 @@ import { callouts } from "./Nextpage";
 import { useParams } from "react-router-dom";
 import Header from "./Mainnavbar";
 import Footer from "./Footer";
-import Sort from "./Sortnfilter";
 import Items from "./Items";
+import Cart from "./Cart";
 
 const Item_category = () => {
   const { id } = useParams();
 
   const callout = callouts.find((callout) => callout.id === id);
   // console.log(callout);
-
-    const [cart, setCart] = useState([]);
+  const [show, setShow] = useState(true);
+  const [cart, setCart] = useState([]);
+    
 
     const handleClick = (product) => {
       let isPresent = false;
@@ -26,7 +27,7 @@ const Item_category = () => {
       }
       setCart([...cart, product]);
        
-      console.log(cart);
+      console.log(cart );
     };
   
   
@@ -34,13 +35,16 @@ const Item_category = () => {
 
   return (
     <>
-      <Header size={cart.length} />
-      <Sort />
+      <Header size={cart.length} setShow={setShow} />
 
-      <Items label={id} handleClick={ handleClick} />
-
+     
+      <Items label={id} handleClick={handleClick}  />
+      
+      
       <Footer />
     </>
   );
 };
 export default Item_category;
+
+

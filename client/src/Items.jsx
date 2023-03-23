@@ -1,10 +1,12 @@
 import React from "react";
 import { Products } from "./Products";
+import Sort from "./Sortnfilter";
 
 export default function Items(props) {
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
+        <Sort />
         <h2 className="sr-only">Products</h2>
         <h1 className=" pb-10 text-4xl">{props.label} </h1>
 

@@ -1,17 +1,16 @@
 import React, { useState } from "react";
 import Header from "./Mainnavbar";
 import Footer from "./Footer";
-
-import Cartiteminfo from "./Cartiteminfo";
-
-
-
+import { AiFillDelete } from "react-icons/ai";
+import { AiFillHeart } from "react-icons/ai";
+import { Products } from "./Products";
 
 
-const Cart = () => {
+
+const Cart = ({cart,setCart}) => {
+
 
   const [price, setPrice] = useState(0);
-
 
 
   return (
@@ -20,13 +19,70 @@ const Cart = () => {
       <div className="bg-white">
         <div className="py-4  sm:px-2 lg:px-2 mx-auto w-fit ">
           <h1 className="text-5xl font-bold text-black ">My Cart </h1>
-          <div className="py-12 flex w-full ">
-            <div className="space-y-[13px] mr-[39px]">
-              <Cartiteminfo />
-              <hr className=" border-black"/>
-             
-            </div>
 
+          <div className="py-12 flex w-full ">
+            {/* {cart.map((items) => ( */}
+
+              <div className="space-y-[13px] mr-[39px]">
+                <div className="flex flex-grow">
+                  <img
+                    src="https://www.linkpicture.com/q/ip14.jpg"
+                    alt=""
+                    className="w-64 h-64"
+                  />
+
+                  <div className="ml-12">
+                    <h1 className="text-2xl font-bold text-black">Backpack</h1>
+                    <h1 className="text-xl font-bold text-black mt-2 ">
+                      Nike Backpack 28 Litre (Black)
+                    </h1>
+                    <p className="text-black mt-2">
+                      Size: <b>40L</b>{" "}
+                    </p>
+                    <p className="text-black">
+                      Color: <b>Black</b>{" "}
+                    </p>
+                    <p className="text-green-500 mt-2">In stock </p>
+                    <button className="btn btn-info mt-2">Free Shipping</button>
+                    <button className="btn btn-warning mx-2 ">
+                      1 Offer Applied
+                    </button>
+                  </div>
+
+                  <div>
+                    <div className="mt-2 mb-2 ml-20">
+                      <button className="border-black border-2  text-black  bg-white w-12 h-10 rounded-l-3xl">
+                        -
+                      </button>
+                      <button className=" border-black  border-t-2 border-b-2  bg-white-600 text-black w-12 h-10">
+                        1
+                      </button>
+
+                      <button className="border-black border-2 bg-white  w-12 h-10 text-black rounded-r-3xl">
+                        +
+                      </button>
+                    </div>
+
+                    <div className="ml-20 mt-8">
+                      <p className="text-black text-2xl ">
+                        <b>Rs. 2000</b>{" "}
+                      </p>
+                      <div className="flex space-x-10">
+                        <a>
+                          <AiFillHeart className="text-2xl text-pink-400 mt-2 " />
+                        </a>
+                        <a>
+                          <AiFillDelete className="text-2xl text-red-600 mt-2 " />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <hr className=" border-black" />
+              </div>
+            {/* ))} */}
+            
             <div className=" w-auto h-fit  border-black border-4 rounded-lg">
               <h1 className="text-3xl font-bold text-black mt-20 mb-4 text-center">
                 Order Summary
@@ -40,11 +96,11 @@ const Cart = () => {
                     <hr className="  border-black" />
 
                     <p className="text-black mb-5 mt-3">
-                      Shipping Charges: <b className="float-right">Rs. 200</b>
+                      Shipping Charges: <b className="float-right">Rs. 0</b>
                     </p>
                     <hr className=" border-black" />
                     <p className="text-black mb-5 mt-3">
-                      Total Taxes: <b className="float-right">Rs. 5400</b>
+                      Total Taxes: <b className="float-right">Rs. 0</b>
                     </p>
                     <hr className=" border-black" />
                     <p className="text-black my-3">

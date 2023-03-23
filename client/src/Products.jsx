@@ -2,7 +2,6 @@ export const Products = [
   {
     id: 1,
     name: "iPhone 14",
-    href: "#",
     price: 50000,
     imageSrc: "https://www.linkpicture.com/q/ip13.jpeg",
     imageAlt:
@@ -11,7 +10,6 @@ export const Products = [
   {
     id: 2,
     name: "iPhone 14 pro",
-    href: "#",
     price: 45999,
     imageSrc: "https://www.linkpicture.com/q/ip14.jpg",
     imageAlt:
@@ -20,7 +18,6 @@ export const Products = [
   {
     id: 3,
     name: "iPhone 12",
-    href: "#",
     price: 79999,
     imageSrc: "https://www.linkpicture.com/q/ip12.jpg",
     imageAlt:
@@ -29,7 +26,6 @@ export const Products = [
   {
     id: 4,
     name: "iPhone 14 plus",
-    href: "#",
     price: 85990,
     imageSrc: "https://www.linkpicture.com/q/ipp14.jpg",
     imageAlt:
