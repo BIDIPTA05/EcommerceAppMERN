@@ -30,8 +30,7 @@ const Item_category = () => {
       console.log(cart );
     };
   
-  
-  
+
 
   return (
     <>
