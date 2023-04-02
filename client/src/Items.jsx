@@ -6,6 +6,11 @@ export default function Items(props) {
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
+        <img
+          src="https://www.linkpicture.com/q/highest-spender-offer-d_1.jpg"
+          type="image"
+          className="w-full"
+        />
         <Sort />
         <h2 className="sr-only">Products</h2>
         <h1 className=" pb-10 text-4xl">{props.label} </h1>
@@ -68,7 +73,12 @@ export default function Items(props) {
               >
                 Buy Now
               </button>{" "}
-              <button className="btn btn-accent" onClick={() => props.handleClick(product)}>Add to Cart</button>
+              <button
+                className="btn btn-accent"
+                onClick={() => props.handleClick(product)}
+              >
+                Add to Cart
+              </button>
             </a>
           ))}
         </div>
