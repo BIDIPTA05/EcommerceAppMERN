@@ -2,19 +2,40 @@ import { React, useState } from "react";
 
 const Sortnfilter = ({ products, setProducts }) => {
 
-
-  
   const sort = (e) => {
-    const sortValue = e.target.value;
+    const value = e.target.value;
     let sortedProducts = [...products];
-    console.log(sortValue);
-    if (sortValue === "low-to-high") {
+    console.log(value);
+    if (value === "low-to-high") {
       setProducts(sortedProducts.sort((a, b) => a.price - b.price));
-    } else if (sortValue === "high-to-low") {
+    }
+    else if (value === "high-to-low") {
       setProducts(sortedProducts.sort((a, b) => b.price - a.price));
     }
   }
 
+
+const filter = (e) => {
+  const value = e.target.value;
+  let filteredProducts = [];
+
+  if (value === "below_20") {
+    filteredProducts = products.filter((product) => product.price < 20000);
+  } else if (value === "20_50") {
+    filteredProducts = products.filter(
+      (product) => product.price >= 20000 && product.price <= 50000
+    );
+  } else if (value === "above_50") {
+    filteredProducts = products.filter((product) => product.price >= 50000);
+  } else {
+    filteredProducts = [...products];
+  }
+
+  setProducts(filteredProducts);
+};
+
+
+  
 
 
   return (
@@ -39,17 +60,20 @@ const Sortnfilter = ({ products, setProducts }) => {
             <option value="high-to-low">Price-High to Low</option>
             <option disabled></option>
           </select>
-          <select className="select select-warning w-full max-w-xs bg-stone-300 text-black border-none">
+          <select
+            className="select select-warning w-full max-w-xs bg-stone-300 text-black border-none"
+            onChange={filter}
+          >
             <option disabled selected>
               <h1>Price Range</h1>
             </option>
-            <option value="#" disabled></option>
-            <option>Rs.0-Rs.20000</option>
-            <option value="#" disabled></option>
-            <option value="">Rs.20000-Rs.50000</option>
-            <option value="#" disabled></option>
-            <option value="">Above Rs.50000</option>
-            <option value="#" disabled></option>
+            <option disabled></option>
+            <option value="below_20">Rs.0-Rs.20000</option>
+            <option disabled></option>
+            <option value="20_50">Rs.20000-Rs.50000</option>
+            <option disabled></option>
+            <option value="above_50">Above Rs.50000</option>
+            <option disabled></option>
           </select>
         </div>
       </form>
