@@ -1,11 +1,7 @@
 import { React, useState } from "react";
 
 const Sortnfilter = ({ products, setProducts }) => {
-const lowToHigh = () => {
-  const sortedProducts = [...products].sort((a, b) => a.price - b.price);
-  console.log(sortedProducts, "boom");
-  setProducts(sortedProducts);
-};
+
 
   
   const sort = (e) => {
