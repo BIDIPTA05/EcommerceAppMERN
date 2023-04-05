@@ -17,16 +17,23 @@ const Sortnfilter = ({ products, setProducts }) => {
 
 const filter = (e) => {
   const value = e.target.value;
-  let filteredProducts = [];
+  let filteredProducts = [...products];
 
   if (value === "below_20") {
-    filteredProducts = products.filter((product) => product.price < 20000);
+    filteredProducts = products.filter(
+      (product) => product.price < 20000
+    );
+    
   } else if (value === "20_50") {
     filteredProducts = products.filter(
       (product) => product.price >= 20000 && product.price <= 50000
     );
+    
   } else if (value === "above_50") {
-    filteredProducts = products.filter((product) => product.price >= 50000);
+    filteredProducts = products.filter(
+      (product) => product.price >= 50000
+    );
+    
   } else {
     filteredProducts = [...products];
   }
