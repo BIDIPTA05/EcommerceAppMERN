@@ -14,7 +14,7 @@ const Sortnfilter = ({ products, setProducts }) => {
     }
   }
 
-
+//filter
 const filter = (e) => {
   const value = e.target.value;
   let filteredProducts = [...products];
