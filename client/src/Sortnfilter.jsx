@@ -1,50 +1,41 @@
 import { React, useState } from "react";
 
-const Sortnfilter = ({ products, setProducts }) => {
+export const RANGE_MAPPER = {
+  below_20: (price) => price < 20000,
+  between_20_50: (price) => price >= 20000 && price <= 50000,
+  above_50: (price) => price >= 50000,
+};
 
+const SORT_DIRECTIONS = {
+  ASC: "asc",
+  DESC: "desc",
+};
+
+const Sortnfilter = ({ products, setProducts }) => {
+  //sort
   const sort = (e) => {
     const value = e.target.value;
     let sortedProducts = [...products];
-    console.log(value);
-    if (value === "low-to-high") {
+
+    if (value === SORT_DIRECTIONS.ASC) {
       setProducts(sortedProducts.sort((a, b) => a.price - b.price));
-    }
-    else if (value === "high-to-low") {
+    } else if (value === SORT_DIRECTIONS.DESC) {
       setProducts(sortedProducts.sort((a, b) => b.price - a.price));
     }
-  }
+  };
 
-//filter
-const filter = (e) => {
-  const value = e.target.value;
-  let filteredProducts = [...products];
+  //filter
+  const filter = (e) => {
+    const value = e.target.value;
+    let filteredProducts = [...products];
 
-  if (value === "below_20") {
-    filteredProducts = products.filter(
-      (product) => product.price < 20000
-    );
-    
-  } else if (value === "20_50") {
-    filteredProducts = products.filter(
-      (product) => product.price >= 20000 && product.price <= 50000
-    );
-    
-  } else if (value === "above_50") {
-    filteredProducts = products.filter(
-      (product) => product.price >= 50000
-    );
-    
-  } else {
-    filteredProducts = [...products];
-  }
+    const rangeFn = RANGE_MAPPER[value];
 
-  setProducts(filteredProducts);
-};
-
-
-  
-
-
+    if (!rangeFn) {
+      setProducts(filteredProducts);
+    }
+    setProducts(filteredProducts.filter((product) => rangeFn(product.price)));
+  };
   return (
     <>
       <form>
@@ -62,9 +53,9 @@ const filter = (e) => {
             <option disabled></option>
             <option value="relevance">Relevance</option>
             <option disabled></option>
-            <option value="low-to-high"> Price-Low to High</option>
+            <option value={SORT_DIRECTIONS.ASC}> Price-Low to High</option>
             <option disabled></option>
-            <option value="high-to-low">Price-High to Low</option>
+            <option value={SORT_DIRECTIONS.DESC}>Price-High to Low</option>
             <option disabled></option>
           </select>
           <select
@@ -77,7 +68,7 @@ const filter = (e) => {
             <option disabled></option>
             <option value="below_20">Rs.0-Rs.20000</option>
             <option disabled></option>
-            <option value="20_50">Rs.20000-Rs.50000</option>
+            <option value="between_20_50">Rs.20000-Rs.50000</option>
             <option disabled></option>
             <option value="above_50">Above Rs.50000</option>
             <option disabled></option>
