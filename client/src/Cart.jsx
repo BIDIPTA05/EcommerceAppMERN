@@ -5,13 +5,8 @@ import { AiFillDelete } from "react-icons/ai";
 import { AiFillHeart } from "react-icons/ai";
 import { Products } from "./Products";
 
-
-
-const Cart = ({cart,setCart}) => {
-
-
+const Cart = ({ cart, setCart }) => {
   const [price, setPrice] = useState(0);
-
 
   return (
     <>
@@ -23,66 +18,66 @@ const Cart = ({cart,setCart}) => {
           <div className="py-12 flex w-full ">
             {/* {cart.map((items) => ( */}
 
-              <div className="space-y-[13px] mr-[39px]">
-                <div className="flex flex-grow">
-                  <img
-                    src="https://www.linkpicture.com/q/ip14.jpg"
-                    alt=""
-                    className="w-64 h-64"
-                  />
+            <div className="space-y-[13px] mr-[39px]">
+              <div className="flex flex-grow">
+                <img
+                  src="https://www.linkpicture.com/q/ip14.jpg"
+                  alt=""
+                  className="w-64 h-64"
+                />
 
-                  <div className="ml-12">
-                    <h1 className="text-2xl font-bold text-black">Backpack</h1>
-                    <h1 className="text-xl font-bold text-black mt-2 ">
-                      Nike Backpack 28 Litre (Black)
-                    </h1>
-                    <p className="text-black mt-2">
+                <div className="ml-12 mt-5">
+                  {/* <h1 className="text-2xl font-bold text-black">iPhone 14 pro</h1> */}
+                  <h1 className="text-2xl font-bold text-black mt-2 ">
+                    Apple iPhone 14 pro (64 GB)
+                  </h1>
+                  {/* <p className="text-black mt-2">
                       Size: <b>40L</b>{" "}
                     </p>
                     <p className="text-black">
                       Color: <b>Black</b>{" "}
-                    </p>
-                    <p className="text-green-500 mt-2">In stock </p>
-                    <button className="btn btn-info mt-2">Free Shipping</button>
-                    <button className="btn btn-warning mx-2 ">
-                      1 Offer Applied
+                    </p> */}
+                  <p className="text-green-500 mt-2">In stock </p>
+                  <button className="btn btn-info mt-2">Free Shipping</button>
+                  <button className="btn btn-warning mx-2 ">
+                    1 Offer Applied
+                  </button>
+                </div>
+
+                <div>
+                  <div className="mt-8 mb-2 ml-20">
+                    <button className="border-black border-2  text-black  bg-white w-12 h-10 rounded-l-3xl">
+                      -
+                    </button>
+                    <button className=" border-black  border-t-2 border-b-2  bg-white-600 text-black  font-bold w-12 h-10">
+                      1
+                    </button>
+
+                    <button className="border-black border-2 bg-white  w-12 h-10 text-black rounded-r-3xl">
+                      +
                     </button>
                   </div>
 
-                  <div>
-                    <div className="mt-2 mb-2 ml-20">
-                      <button className="border-black border-2  text-black  bg-white w-12 h-10 rounded-l-3xl">
-                        -
-                      </button>
-                      <button className=" border-black  border-t-2 border-b-2  bg-white-600 text-black w-12 h-10">
-                        1
-                      </button>
-
-                      <button className="border-black border-2 bg-white  w-12 h-10 text-black rounded-r-3xl">
-                        +
-                      </button>
-                    </div>
-
-                    <div className="ml-20 mt-8">
-                      <p className="text-black text-2xl ">
-                        <b>Rs. 2000</b>{" "}
-                      </p>
-                      <div className="flex space-x-10">
-                        <a>
-                          <AiFillHeart className="text-2xl text-pink-400 mt-2 " />
-                        </a>
-                        <a>
-                          <AiFillDelete className="text-2xl text-red-600 mt-2 " />
-                        </a>
-                      </div>
+                  <div className="ml-24 mt-8">
+                    <p className="text-black text-3xl ">
+                      <b>Rs. 2000</b>{" "}
+                    </p>
+                    <div className="flex space-x-10 mt-8">
+                      <a>
+                        <AiFillHeart className="text-4xl text-pink-400 mt-2 " />
+                      </a>
+                      <a>
+                        <AiFillDelete className="text-4xl text-red-600 mt-2 " />
+                      </a>
                     </div>
                   </div>
                 </div>
-
-                <hr className=" border-black" />
               </div>
+
+              <hr className=" border-black" />
+            </div>
             {/* ))} */}
-            
+
             <div className=" w-auto h-fit  border-black border-4 rounded-lg">
               <h1 className="text-3xl font-bold text-black mt-20 mb-4 text-center">
                 Order Summary
