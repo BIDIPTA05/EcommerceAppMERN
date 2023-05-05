@@ -21,15 +21,7 @@ const App = () => {
           <Route path="/products" element={<Nextpage />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/wishlist" element={<Wishlist />} />
-          
-         
-
-          {/* <Route path="/products/smartphones" element={<Mobiles />} />
-          <Route path="/products/laptops" element={<Laptops />} />
-          <Route path="/products/accessories" element={<Accessories />} /> */}
-
           <Route path={`/products/:id`} element={<Item_category />} />
-
           <Route path="/*" element={<Error />} />
         </Routes>
       </BrowserRouter>
