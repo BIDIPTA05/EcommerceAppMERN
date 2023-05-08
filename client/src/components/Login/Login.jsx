@@ -15,12 +15,13 @@ import { useNavigate } from "react-router-dom";
 
 const initialValues = { email: "", password: "" };
 
-const API_BASE_URL = "http://localhost:3000";
+const API_BASE_URL = "http://localhost:4000";
 
 const Login = () => {
   const navigate = useNavigate();
   const [formValues, setFormValues] = useState(initialValues);
   const [formError, setFormError] = useState(initialValues);
+  const [loggedInUser, setLoggedInUser] = useState("");
 
   const change = (event) => {
     const { name, value } = event.target;
@@ -63,11 +64,19 @@ const Login = () => {
           }),
         });
         console.log(res);
-        if (res.status === 400) {
-          alert("Unsuccessful");
-        } else {
-          alert("login Successfull");
+
+        const data = await res.json();
+        setLoggedInUser(data);
+
+        if (res.ok) {
+          alert("Login successful");
           navigate("/");
+        } else if (res.status >= 400 && res.status < 500) {
+          alert("Invalid email or password");
+        } else if (res.status >= 500) {
+          alert("Server error. Please try again later");
+        } else {
+          alert("Unknown error. Please try again later");
         }
       } catch (error) {
         console.log(error);
@@ -77,7 +86,7 @@ const Login = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar loggedInUser={loggedInUser} />
       <div className="flex flex-col items-center min-h-screen pt-6 sm:justify-center sm:pt-0 bg-gray-50 pb-4">
         <div>
           <a href="/">

@@ -3,11 +3,15 @@ import { BsFillCartPlusFill } from "react-icons/bs";
 import { BsFillBookmarkHeartFill } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 
-export default function NavBar({size}) {
-const [navbar, setNavbar] = useState(false);
-const navigate = useNavigate();
+export default function NavBar({ size }) {
+  const [navbar, setNavbar] = useState(false);
+  const navigate = useNavigate();
 
- 
+  const [loggedInUser, setLoggedInUser] = useState(null);
+
+  const logout = () => {
+    setLoggedInUser(null);
+  };
 
   return (
     <nav className="w-full bg-base-200 shadow p-5">
@@ -100,17 +104,37 @@ const navigate = useNavigate();
 
               <li>
                 <a>
-                  <button
-                    onClick={() => navigate("/register")}
-                    className="btn"
-                    style={{
-                      background: "#2ba3e3",
-                      color: "white",
-                      border: "none",
-                    }}
-                  >
-                    Login Or Register
-                  </button>
+                  
+
+
+
+                  {loggedInUser ? (
+                    <button
+                      className="btn"
+                      style={{
+                        background: "#2ba3e3",
+                        color: "white",
+                        border: "none",
+                      }}
+                      onClick={logout}
+                    >
+                      Logout ({loggedInUser})
+                    </button>
+                  ) :
+                    (<button
+                      onClick={() => navigate("/login")}
+                      className="btn"
+                      style={{
+                        background: "#2ba3e3",
+                        color: "white",
+                        border: "none",
+                      }}
+                    >
+                      Login Or Register
+                    </button>)
+                  }
+
+
                 </a>
               </li>
             </ul>
