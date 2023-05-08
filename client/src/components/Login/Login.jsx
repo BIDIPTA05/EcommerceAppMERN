@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 
 const initialValues = { email: "", password: "" };
 
-
+const API_BASE_URL = "http://localhost:3000";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -50,12 +50,9 @@ const Login = () => {
     console.log(validate(formValues));
     const isError = validate(formValues);
 
-    // try {
-
     if (Object.keys(isError).length == 0) {
-      const res = await fetch(
-        "https://rose-doubtful-moth.cyclic.app/user/login",
-        {
+      try {
+        const res = await fetch(`${API_BASE_URL}/users/login`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -64,22 +61,18 @@ const Login = () => {
             email,
             password,
           }),
+        });
+        console.log(res);
+        if (res.status === 400) {
+          alert("Unsuccessful");
+        } else {
+          alert("login Successfull");
+          navigate("/");
         }
-      );
-      console.log(res);
-      if (res.status === 400) {
-        alert("Unsuccessful");
-        
-      } else {
-        alert("login Successfull")
-        navigate("/");
+      } catch (error) {
+        console.log(error);
       }
     }
-
-    // } catch (error) {
-    //   console.log(error)
-
-    // }
   };
 
   return (
