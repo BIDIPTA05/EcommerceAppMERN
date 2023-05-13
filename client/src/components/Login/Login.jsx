@@ -21,7 +21,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [formValues, setFormValues] = useState(initialValues);
   const [formError, setFormError] = useState(initialValues);
-  const [loggedInUser, setLoggedInUser] = useState("");
+  const [token, setToken] = useState("");
 
   const change = (event) => {
     const { name, value } = event.target;
@@ -65,10 +65,11 @@ const Login = () => {
         });
         console.log(res);
 
-        const data = await res.json();
-        setLoggedInUser(data);
-
         if (res.ok) {
+          const data = await res.json();
+          const token = data.token;
+          localStorage.setItem("token", token);
+          setToken(token);
           alert("Login successful");
           navigate("/");
         } else if (res.status >= 400 && res.status < 500) {
@@ -86,7 +87,7 @@ const Login = () => {
 
   return (
     <>
-      <Navbar loggedInUser={loggedInUser} />
+      <Navbar />
       <div className="flex flex-col items-center min-h-screen pt-6 sm:justify-center sm:pt-0 bg-gray-50 pb-4">
         <div>
           <a href="/">

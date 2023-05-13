@@ -1,17 +1,28 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BsFillCartPlusFill } from "react-icons/bs";
 import { BsFillBookmarkHeartFill } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function NavBar({ size }) {
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [userName, setUserName] = useState("");
+
+  
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setLoggedIn(true);
+    }
+  }, []);
+
+  function handleLogout() {
+    localStorage.removeItem("token");
+    setLoggedIn(false);
+  }
+
   const [navbar, setNavbar] = useState(false);
   const navigate = useNavigate();
-
-  const [loggedInUser, setLoggedInUser] = useState(null);
-
-  const logout = () => {
-    setLoggedInUser(null);
-  };
 
   return (
     <nav className="w-full bg-base-200 shadow p-5">
@@ -102,26 +113,30 @@ export default function NavBar({ size }) {
                 </a>
               </li>
 
-              <li>
-                <a>
-                  
-
-
-
-                  {loggedInUser ? (
-                    <button
-                      className="btn"
-                      style={{
-                        background: "#2ba3e3",
-                        color: "white",
-                        border: "none",
-                      }}
-                      onClick={logout}
+              <div>
+                {loggedIn ? (
+                  <div className="dropdown dropdown-end">
+                    <label
+                      tabIndex={0}
+                      className="btn m-1 bg-purple-800 text-white"
                     >
-                      Logout ({loggedInUser})
-                    </button>
-                  ) :
-                    (<button
+                      WELCOME
+                    </label>
+                    <ul
+                      tabIndex={0}
+                      className="dropdown-content menu p-2 shadow bg-purple-400 rounded-box w-52 text-white "
+                    >
+                      <li>
+                        <a className="b-3">My Account</a>
+                      </li>
+                      <li>
+                        <button onClick={handleLogout}>Logout</button>
+                      </li>
+                    </ul>
+                  </div>
+                ) : (
+                  <li>
+                    <button
                       onClick={() => navigate("/login")}
                       className="btn"
                       style={{
@@ -131,12 +146,10 @@ export default function NavBar({ size }) {
                       }}
                     >
                       Login Or Register
-                    </button>)
-                  }
-
-
-                </a>
-              </li>
+                    </button>
+                  </li>
+                )}
+              </div>
             </ul>
           </div>
         </div>
