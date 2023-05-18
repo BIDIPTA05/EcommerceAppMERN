@@ -68,7 +68,10 @@ const Login = () => {
         if (res.ok) {
           const data = await res.json();
           const token = data.token;
+          console.log(data);
           localStorage.setItem("token", token);
+          localStorage.setItem("userId", data.userId);
+
           setToken(token);
           alert("Login successful");
           navigate("/");

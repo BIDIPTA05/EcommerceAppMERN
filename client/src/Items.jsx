@@ -1,12 +1,101 @@
-import { React, useState } from "react";
-import { Products } from "./Products";
+import { React, useState, useEffect } from "react";
 import Sort from "./Sortnfilter";
-
+import { AiFillHeart } from "react-icons/ai";
 export default function Items(props) {
-  console.log({ Products });
-  const [products, setProducts] = useState(Products);
+  const [products, setProducts] = useState([]);
 
-  
+  const API_BASE_URL = "http://localhost:4000";
+
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const response = await fetch(`${API_BASE_URL}/products`);
+        const productsData = await response.json();
+        const products = productsData.products; // define products variable here
+        setProducts(products); // set products state here
+        console.log(products);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchProducts();
+  }, []);
+
+  //add to wishlist
+  const handleAddToWishlist = async (itemId) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${API_BASE_URL}/users/wishlist/${itemId}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({
+          id: localStorage.getItem("userId"),
+        }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        console.log("Item added");
+        alert("Item added to wishlist");
+        const { success, message, user } = data;
+        // Handle the response data as needed
+      } else {
+        console.log("Item already added");
+        alert("WARNING: Item already in wishlist");
+        const { error } = data;
+        // Handle the error state here
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  //add to cart
+  const handleAddToCart = async (productId) => {
+    try {
+      const token = localStorage.getItem("token");
+      const userId = localStorage.getItem("userId");
+      if (!token || !userId) {
+        alert("Please login to add to cart");
+        return;
+      }
+
+      const response = await fetch(`${API_BASE_URL}/users/cart/${productId}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: userId,
+        }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        if (data.success) {
+          console.log("Product added to cart");
+          const { success, message, user } = data;
+          // Handle the response data as needed
+        } else {
+          console.log("Product already in cart");
+          const { success, message } = data;
+          // Handle the case when the product is already in the cart
+        }
+      } else {
+        alert("Product already in cart");
+        const { error } = data;
+        // Handle the error state here
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="bg-white">
@@ -22,12 +111,13 @@ export default function Items(props) {
 
         <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
           {products.map((product) => (
-            <a key={product.id} href={product.href} className="group">
+            <a key={product._id} href={product.href} className="group">
               <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-w-7 xl:aspect-h-8">
                 <img
-                  src={product.imageSrc}
+                  src={product.productImage}
                   alt={product.imageAlt}
                   className="h-full w-full object-cover object-center group-hover:opacity-75"
+                  crossOrigin="anonymous"
                 />
               </div>
               <h3 className="mt-4 text-xl  text-gray-700">{product.name}</h3>
@@ -68,22 +158,18 @@ export default function Items(props) {
                 />
               </div>
               <br />
-              <button
-                className="btn btn-primary    "
-                style={{
-                  background: "#2ba3e3",
-                  border: "none",
-                  marginTop: "10px",
-                }}
-              >
-                Buy Now
-              </button>{" "}
-              <button
-                className="btn btn-accent"
-                onClick={() => props.handleClick(product)}
-              >
-                Add to Cart
-              </button>
+              <div className="flex space-x-10">
+                <button
+                  className="btn btn-accent"
+                  onClick={() => handleAddToCart(product._id, 1)}
+                >
+                  Add to Cart
+                </button>
+
+                <a onClick={() => handleAddToWishlist(product._id)}>
+                  <AiFillHeart className="text-4xl text-pink-400 mt-2 " />
+                </a>
+              </div>
             </a>
           ))}
         </div>

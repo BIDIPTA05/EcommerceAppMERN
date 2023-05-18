@@ -1,61 +1,190 @@
+import { useEffect, useState } from "react";
 import { AiFillDelete } from "react-icons/ai";
-import Wishlist from "./Wishlist";
-
-const products = [
-  {
-    id: 1,
-    name: "iPhone 14",
-    price: 50000,
-    imageSrc: "https://www.linkpicture.com/q/ip13.jpeg",
-    imageAlt:
-      "Tall slender porcelain bottle with natural clay textured body and cork stopper.",
-  },
-  {
-    id: 2,
-    name: "iPhone 14 pro",
-    price: 45999,
-    imageSrc: "https://www.linkpicture.com/q/ip14.jpg",
-    imageAlt:
-      "Olive drab green insulated bottle with flared screw lid and flat top.",
-  },
-  {
-    id: 3,
-    name: "iPhone 12",
-    price: 79999,
-    imageSrc: "https://www.linkpicture.com/q/ip12.jpg",
-    imageAlt:
-      "Person using a pen to cross a task off a productivity paper card.",
-  },
-  {
-    id: 4,
-    name: "iPhone 14 plus",
-    price: 85990,
-    imageSrc: "https://www.linkpicture.com/q/ipp14.jpg",
-    imageAlt:
-      "Hand holding black machined steel mechanical pencil with brass tip and top.",
-  },
-  {
-    id: 5,
-    name: "iPhone 14",
-    price: 37999,
-    imageSrc: "https://www.linkpicture.com/q/ip13.jpeg",
-    imageAlt:
-      "Tall slender porcelain bottle with natural clay textured body and cork stopper.",
-  },
-];
 
 export default function Example(props) {
+  const [products, setProducts] = useState([]);
+  const API_BASE_URL = "http://localhost:4000";
+
+  //get logedin usedid
+  const userId = localStorage.getItem("userId");
+
+  useEffect(() => {
+    async function fetchWishlist() {
+      try {
+        const token = localStorage.getItem("token");
+        //save user if from local storage
+
+        const response = await fetch(`${API_BASE_URL}/users/profile`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: localStorage.getItem("userId"),
+          }),
+        });
+        console.log(response); // Check the response here
+
+        const data = await response.json();
+        console.log(data);
+        setProducts(data.user.wishlist);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchWishlist();
+  }, []);
+  console.log(products);
+
+
+  
+  if (!products || (products.length === 0 && userId)) {
+    return (
+      <div className="bg-white">
+        <div className="mx-auto max-w-2xl px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
+          <h1 className="text-5xl font-bold text-black  mb-10">My Wishlist </h1>
+          <h1 className="text-2xl font-bold text-black  mb-10">
+            No items in wishlist
+          </h1>
+        </div>
+      </div>
+    );
+    //if no user is logged in
+  } else if (!userId) {
+    return (
+      <div className="bg-white">
+        <div className="mx-auto max-w-2xl px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
+          <h1 className="text-5xl font-bold text-black  mb-10">My Wishlist </h1>
+          <h1 className="text-2xl font-bold text-black  mb-10">
+            Please login to view your wishlist
+          </h1>
+        </div>
+      </div>
+    );
+  }
+
+  //remove from wishlist
+  const handleRemoveFromCart = async (itemId) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${API_BASE_URL}/users/wishlist/${itemId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({
+          id: localStorage.getItem("userId"),
+        }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        console.log("Item removed");
+        const { success, message, user } = data;
+        setProducts((prevProducts) =>
+          prevProducts.filter((product) => product._id !== itemId)
+        );
+        // Handle the response data as needed
+        console.log(data);
+      } else {
+        // Item removal failed
+        console.log("Error removing item");
+        const { success, message, error } = data;
+        // Handle the error message or error object
+        console.error(message, error);
+      }
+    } catch (error) {
+      // Error occurred during the request
+      console.error("Error:", error);
+    }
+  };
+
+  //move to cart
+  const moveFromWishlistToCart = async (itemId) => {
+    try {
+      const token = localStorage.getItem("token");
+      const userId = localStorage.getItem("userId");
+
+      // Check if the user is logged in
+      if (!token || !userId) {
+        console.log("User not logged in");
+        // Handle the case when the user is not logged in
+        return;
+      }
+
+      const addToCartResponse = await fetch(
+        `${API_BASE_URL}/users/cart/${itemId}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: userId,
+            quantity: 1, // Set the desired quantity
+          }),
+        }
+      );
+
+      const addToCartData = await addToCartResponse.json();
+      if (addToCartResponse.ok) {
+        console.log("Item added to cart");
+        // Handle the successful addition to cart
+
+        // Remove the item from the wishlist only if it was successfully added to the cart
+        const removeFromWishlistResponse = await fetch(
+          `${API_BASE_URL}/users/wishlist/${itemId}`,
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json, text/plain, */*",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              id: userId,
+            }),
+          }
+        );
+
+        const removeFromWishlistData = await removeFromWishlistResponse.json();
+        if (removeFromWishlistResponse.ok) {
+          setProducts((prevProducts) =>
+            prevProducts.filter((product) => product._id !== itemId)
+          );
+          console.log("Item moved to cart");
+          alert("Item moved to cart");
+          // Handle the successful removal from wishlist
+        } else {
+          console.log("Error removing item from wishlist");
+          // Handle the error state for removing from wishlist
+        }
+      } else {
+        alert("WARNING: ITEM ALREADY IN CART");
+        // Handle the error state for adding to cart
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
         <h1 className="text-5xl font-bold text-black  mb-10">My Wishlist </h1>
 
         <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8 ">
-          {products.map((product) => (
-            <a key={product.id} href={product.href} className="group">
+          {products?.map((product, key) => (
+            <a key={key} href={product.href} className="group">
               <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-w-7 xl:aspect-h-8">
                 <img
-                  src={product.imageSrc}
+                  src={product.productImage}
                   alt={product.imageAlt}
                   className="h-full w-full object-cover object-center group-hover:opacity-75"
                 />
@@ -69,42 +198,18 @@ export default function Example(props) {
                 style={{
                   marginTop: "10px",
                 }}
-              >
-                <input
-                  type="radio"
-                  name="rating-2"
-                  className="mask mask-star-2 bg-orange-400"
-                />
-                <input
-                  type="radio"
-                  name="rating-2"
-                  className="mask mask-star-2 bg-orange-400"
-                  checked
-                />
-                <input
-                  type="radio"
-                  name="rating-2"
-                  className="mask mask-star-2 bg-orange-400"
-                />
-                <input
-                  type="radio"
-                  name="rating-2"
-                  className="mask mask-star-2 bg-orange-400"
-                />
-                <input
-                  type="radio"
-                  name="rating-2"
-                  className="mask mask-star-2 bg-orange-400"
-                />
-              </div>
+              ></div>
               <br />
 
               <div className="flex space-x-10">
-                <button className="btn btn-accent"  onClick={() => props.handleClick(product)}>
+                <button
+                  className="btn btn-accent"
+                  onClick={() => moveFromWishlistToCart(product._id)}
+                >
                   Move to Cart
                 </button>
 
-                <a>
+                <a onClick={() => handleRemoveFromCart(product._id)}>
                   <AiFillDelete className="text-2xl text-red-600 mt-2 " />
                 </a>
               </div>

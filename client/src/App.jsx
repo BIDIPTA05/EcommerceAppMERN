@@ -8,7 +8,7 @@ import Error from "./Error";
 import Item_category from "./Item_Caterogy";
 import Cart from "./Cart";
 import Wishlist from "./Wishlist";
-
+import Add from "./Address";
 
 const App = () => {
   return (
@@ -23,6 +23,7 @@ const App = () => {
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path={`/products/:id`} element={<Item_category />} />
           <Route path="/*" element={<Error />} />
+          <Route path="/add" element={<Add />} />
         </Routes>
       </BrowserRouter>
     </>

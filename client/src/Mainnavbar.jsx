@@ -7,8 +7,6 @@ export default function NavBar({ size }) {
   const [loggedIn, setLoggedIn] = useState(false);
   const [userName, setUserName] = useState("");
 
-  
-
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -18,6 +16,7 @@ export default function NavBar({ size }) {
 
   function handleLogout() {
     localStorage.removeItem("token");
+    localStorage.removeItem("userId");
     setLoggedIn(false);
   }
 
