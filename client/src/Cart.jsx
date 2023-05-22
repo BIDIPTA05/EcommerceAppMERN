@@ -10,12 +10,56 @@ import Header from "./Mainnavbar";
 import Footer from "./Footer";
 
 
+//navigation
+import { useNavigate } from "react-router-dom";
+import Address from "./Address";
+
 export default function Example() {
+  const navigate = useNavigate();
+  const [totalPrice, setTotalPrice] = useState(0);
+
   const [products, setProducts] = useState([]);
   const API_BASE_URL = "http://localhost:4000";
 
+  
+
   //get logedin usedid
   const userId = localStorage.getItem("userId");
+
+  //address
+  const [address, setAddress] = useState({
+    name: "",
+    street: "",
+    city: "",
+    state: "",
+    zip: "",
+    phone_number: "",
+  });
+
+  const handleChange = (e) => {
+    setAddress({ ...address, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Send form data to the server
+    fetch(`${API_BASE_URL}/api/checkout`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(address),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Handle the server response
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
 
   useEffect(() => {
     async function fetchCart() {
@@ -46,6 +90,14 @@ export default function Example() {
     fetchCart();
   }, []);
   console.log(products);
+
+  useEffect(() => {
+    const totalPrice = products.reduce(
+      (total, product) => total + product.price,
+      0
+    );
+    setTotalPrice(totalPrice);
+  }, [products]);
 
   //delete from cart
   const handleRemoveFromCart = async (itemId) => {
@@ -108,7 +160,7 @@ export default function Example() {
     return (
       <div className="bg-white">
         <div className="mx-auto max-w-2xl px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
-          <h1 className="text-5xl font-bold text-black  mb-10">My Wishlist </h1>
+          <h1 className="text-5xl font-bold text-black  mb-10">My Cart </h1>
           <h1 className="text-2xl font-bold text-black  mb-10">
             Please login to view your wishlist
           </h1>
@@ -116,10 +168,74 @@ export default function Example() {
       </div>
     );
   }
+  const checkoutHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const key = "rzp_test_nT9c75B62QdPkY";
+      console.log(address);
+      console.log(products);
+      console.log(localStorage.getItem("userId"));
+      console.log(totalPrice * 100);
+
+      const productArray = products.map((product) => {
+        return {
+          productId: product._id,
+        };
+      });
+
+      console.log(productArray);
+
+      const checkoutResponse = await fetch(
+        "http://localhost:4000/api/checkout",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            total_amount: totalPrice * 100,
+            userId: localStorage.getItem("userId"),
+            address: address,
+            products: productArray,
+          }),
+        }
+      );
+
+      const data = await checkoutResponse.json();
+      console.log(data);
+      const options = {
+        key: key,
+        amount: data.order.amount,
+        currency: "INR",
+        name: "Bidipta Saikia",
+        description: "Ecom app payment",
+        image: "https://avatars.githubusercontent.com/u/76623158?v=4",
+        order_id: data.order.id,
+        callback_url: "http://localhost:4000/api/verify",
+        prefill: {
+          name: "Bidipta Saikia",
+          email: "bidipta.saikia@gmail.com",
+          contact: "9876789876",
+        },
+        notes: {
+          address: "Razorpay Corporate Office",
+        },
+        theme: {
+          color: "#528FF0",
+        },
+      };
+
+      const razor = new window.Razorpay(options);
+      razor.open();
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <>
-      <Header />
+      <Header/>
       <div className="bg-white">
         <div className="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
           <h1 className="text-5xl font-bold text-black  mb-10">
@@ -229,7 +345,7 @@ export default function Example() {
                 <div className="flex items-center justify-between">
                   <dt className="text-sm text-gray-600">Subtotal</dt>
                   <dd className="text-sm font-medium text-gray-900">
-                    Rs. 999099.00
+                    Rs. {totalPrice.toFixed(2)}
                   </dd>
                 </div>
                 <div className="flex items-center justify-between border-t border-gray-200 pt-4">
@@ -249,7 +365,7 @@ export default function Example() {
                     </a>
                   </dt>
                   <dd className="text-sm font-medium text-gray-900">
-                    Rs. 50.00
+                    Rs. 0.00
                   </dd>
                 </div>
                 <div className="flex items-center justify-between border-t border-gray-200 pt-4">
@@ -269,7 +385,7 @@ export default function Example() {
                     </a>
                   </dt>
                   <dd className="text-sm font-medium text-gray-900">
-                    Rs. 800.32
+                    Rs. 0.00
                   </dd>
                 </div>
                 <div className="flex items-center justify-between border-t border-gray-200 pt-4">
@@ -277,23 +393,148 @@ export default function Example() {
                     Order total
                   </dt>
                   <dd className="text-base font-medium text-gray-900">
-                    Rs. 1120000.32
+                    Rs. {totalPrice.toFixed(2)}
                   </dd>
                 </div>
               </dl>
 
               <div className="mt-6">
-                <button
+                {/* <button
                   type="submit"
                   className="w-full rounded-md border border-transparent bg-indigo-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                  onClick={checkoutHandler}
                 >
                   Checkout
-                </button>
+                </button> */}
               </div>
             </section>
           </form>
         </div>
       </div>
+
+      <div className="flex justify-center items-center h-screen  bg-white ">
+        <form
+          onSubmit={handleSubmit}
+          className="max-w-xl w-full mx-auto p-8 bg-white rounded-lg shadow-lg  "
+        >
+          <h1 className="text-4xl font-bold text-black  mb-10">
+            Add Shipping Address Below{" "}
+          </h1>
+          <div className="mb-6">
+            <label
+              htmlFor="name"
+              className="block text-gray-700 font-medium mb-1"
+            >
+              Name
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={address.name}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-400 bg-white text-black"
+              required
+            />
+          </div>
+
+          <div className="mb-6">
+            <label
+              htmlFor="street"
+              className="block text-gray-700 font-medium mb-1"
+            >
+              Street Address
+            </label>
+            <input
+              type="text"
+              id="street"
+              name="street"
+              value={address.street}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-400 bg-white text-black"
+              required
+            />
+          </div>
+          <div className="mb-6">
+            <label
+              htmlFor="city"
+              className="block text-gray-700 font-medium mb-1"
+            >
+              City
+            </label>
+            <input
+              type="text"
+              id="city"
+              name="city"
+              value={address.city}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-400 bg-white text-black"
+              required
+            />
+          </div>
+          <div className="mb-6">
+            <label
+              htmlFor="state"
+              className="block text-gray-700 font-medium mb-1"
+            >
+              State
+            </label>
+            <input
+              type="text"
+              id="state"
+              name="state"
+              value={address.state}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-400 bg-white text-black"
+              required
+            />
+          </div>
+          <div className="mb-6">
+            <label
+              htmlFor="zip"
+              className="block text-gray-700 font-medium mb-1"
+            >
+              ZIP Code
+            </label>
+            <input
+              type="text"
+              id="zip"
+              name="zip"
+              value={address.zip}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-400 bg-white text-black"
+              required
+            />
+          </div>
+
+          <div className="mb-6">
+            <label
+              htmlFor="phone_number"
+              className="block text-gray-700 font-medium mb-1"
+            >
+              Phone Number
+            </label>
+            <input
+              type="text"
+              id="phone_number"
+              name="phone_number"
+              value={address.phone_number}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-400 bg-white text-black"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="w-full rounded-md border border-transparent bg-indigo-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+            onClick={checkoutHandler}
+          >
+            PROCEED TO PAYMENT
+          </button>
+        </form>
+      </div>
+
       <Footer />
     </>
   );

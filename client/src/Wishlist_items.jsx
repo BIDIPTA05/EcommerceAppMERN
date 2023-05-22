@@ -38,18 +38,22 @@ export default function Example(props) {
   }, []);
   console.log(products);
 
-
   
+
   if (!products || (products.length === 0 && userId)) {
     return (
-      <div className="bg-white">
-        <div className="mx-auto max-w-2xl px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
-          <h1 className="text-5xl font-bold text-black  mb-10">My Wishlist </h1>
-          <h1 className="text-2xl font-bold text-black  mb-10">
-            No items in wishlist
-          </h1>
+      <>
+        <div className="bg-white">
+          <div className="mx-auto max-w-2xl px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
+            <h1 className="text-5xl font-bold text-black  mb-10">
+              My Wishlist{" "}
+            </h1>
+            <h1 className="text-2xl font-bold text-black  mb-10">
+              No items in wishlist
+            </h1>
+          </div>
         </div>
-      </div>
+      </>
     );
     //if no user is logged in
   } else if (!userId) {

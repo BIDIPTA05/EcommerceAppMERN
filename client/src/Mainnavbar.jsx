@@ -2,14 +2,17 @@ import { useState, useEffect } from "react";
 import { BsFillCartPlusFill } from "react-icons/bs";
 import { BsFillBookmarkHeartFill } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
+import { auth } from "./firebase";
+import { parse } from "postcss";
 
-export default function NavBar({ size }) {
+export default function NavBar(props) {
   const [loggedIn, setLoggedIn] = useState(false);
-  const [userName, setUserName] = useState("");
+ 
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) {
+    const fire_base_token = localStorage.getItem("firebase-token");
+    if (token || fire_base_token) {
       setLoggedIn(true);
     }
   }, []);
@@ -17,8 +20,12 @@ export default function NavBar({ size }) {
   function handleLogout() {
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
+    localStorage.removeItem("firebase-token");
+    auth.signOut();
     setLoggedIn(false);
   }
+
+ 
 
   const [navbar, setNavbar] = useState(false);
   const navigate = useNavigate();
@@ -102,9 +109,7 @@ export default function NavBar({ size }) {
               <li className="text-white hover:text-blue-600">
                 <a href="#">
                   <div className="indicator ">
-                    <span className="indicator-item badge badge-secondary bg-red-600 border-white  ">
-                      {size}
-                    </span>
+                  
                     <Link navigate to="/cart">
                       <BsFillCartPlusFill className="text-3xl text-white" />
                     </Link>

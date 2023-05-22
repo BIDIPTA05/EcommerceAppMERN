@@ -8,7 +8,9 @@ import Error from "./Error";
 import Item_category from "./Item_Caterogy";
 import Cart from "./Cart";
 import Wishlist from "./Wishlist";
-import Add from "./Address";
+import Address from "./Address";
+import Orders from "./Orders";
+import Pro from "./Singlepage";
 
 const App = () => {
   return (
@@ -23,7 +25,9 @@ const App = () => {
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path={`/products/:id`} element={<Item_category />} />
           <Route path="/*" element={<Error />} />
-          <Route path="/add" element={<Add />} />
+          <Route path="/address" element={<Address />} />
+          <Route path="/orders" element={<Orders />} />
+          <Route path="/:productId" element={<Pro />} />
         </Routes>
       </BrowserRouter>
     </>

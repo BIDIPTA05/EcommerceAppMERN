@@ -9,6 +9,10 @@ import Regibutton from "./Regibutton";
 import Regiinput from "./Regiinput";
 import Footer from "../../Footer";
 import Navbar from "../../Mainnavbar";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+
+
+
 
 import { useState } from "react";
 
@@ -21,7 +25,16 @@ const initialValues = {
 
 const API_BASE_URL = "http://localhost:4000";
 
+
+
+
+
+
+
+
 export default function Registration() {
+
+
   const [formValues, setFormValues] = useState(initialValues);
   const [formError, setFormError] = useState(initialValues);
 
@@ -58,6 +71,11 @@ export default function Registration() {
   };
 
   const postData = async (e) => {
+
+
+
+
+
     e.preventDefault();
     setFormError(validate(formValues));
     const { name, email, password } = formValues;
@@ -158,17 +176,13 @@ export default function Registration() {
                 type="button"
                 icon={FcGoogle}
               />
-              <Regibutton
-                label="Login with Facebook"
-                type="button"
-                icon={BsFacebook}
-                color="fill-blue-600"
-              />
             </div>
           </div>
         </div>
       </div>
       <Footer />
-    </>
+  </>
+  
+
   );
 }

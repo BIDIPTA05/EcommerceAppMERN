@@ -9,7 +9,10 @@ import Header from "../Ext/Header";
 import Account from "../Ext/Account";
 import Navbar from "../../Mainnavbar";
 import Footer from "../../Footer";
+import { auth } from "../../firebase";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
+//import { useGoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -43,6 +46,19 @@ const Login = () => {
     }
     return error;
   };
+
+  const firebase_google_auth = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth, provider);
+      navigate("/");
+      alert("Login successful");
+      localStorage.setItem("firebase-token", auth.currentUser.accessToken);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
 
   const loginData = async (e) => {
     e.preventDefault();
@@ -87,6 +103,9 @@ const Login = () => {
       }
     }
   };
+  const redirect = () => {
+    navigate("/");
+  };
 
   return (
     <>
@@ -126,17 +145,13 @@ const Login = () => {
           </form>
           <Or />
           <div className="my-6 space-y-2">
-            <Regibutton
+            {/* <Regibutton
               label="Login with Google"
               type="button"
               icon={FcGoogle}
-            />
-            <Regibutton
-              label="Login with Facebook"
-              type="button"
-              icon={BsFacebook}
-              color="fill-blue-600"
-            />
+              onclick={google_login}
+            /> */}
+            <button onClick={firebase_google_auth}>google</button>
           </div>
         </div>
       </div>
